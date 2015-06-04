@@ -11,7 +11,7 @@ class WebAppCC < Sinatra::Base
   include WebAppHelper
 
 configure :production do
-  use RacK::SslEnforcer
+  use Rack::SslEnforcer
   set :session_secret, ENV['MSG_KEY']
 end
 
