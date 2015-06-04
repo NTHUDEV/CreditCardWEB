@@ -13,5 +13,7 @@
         = "login | "
       %a{href: '/register'}
         = "register"
-    = haml :flash_bar    
+    %a{href: '/'}
+      = "| Home"
+    = haml :flash_bar
     = yield

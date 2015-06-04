@@ -1,8 +1,0 @@
-%h2 Validate Credit Card
-- if @validation_results
-  %p
-    = "The card number you provided is #{@validation_results[:validated]}."
-%form{:action => '/validate', :method => 'post', :id => 'user-form'}
-  %label{:for => 'cred_card_num'} Credit Card Number
-  %input{:type => 'text', :name => 'credit_card_num', :id => 'cred_card_num', :placeholder => '(enter a credit card number)'}
-  %input{:type => 'submit', :id => 'home-form-submit', :class => 'submit', :value => 'submit'}

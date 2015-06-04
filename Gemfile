@@ -16,6 +16,7 @@ gem 'rack-flash3'
 gem 'jwt'
 gem 'pony'
 gem 'sendgrid-ruby'
+gem 'rack-ssl-enforcer'
 
 group :development, :test do
   gem 'sqlite3'

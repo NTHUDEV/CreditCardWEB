@@ -5,26 +5,8 @@ require 'base64'
 require 'rbnacl/libsodium'
 require_relative 'email_helper'
 
-module CreditCardHelper
+module WebAppHelper
   include EmailHelper
-  def validate_card(card_num)
-    creditcard = CreditCard.new
-    creditcard.number = card_num
-    creditcard.validate_checksum ? validation="Ok" : validation="mispelled"
-    { :card => creditcard.number, :validated => validation }
-  end
-
-  def new_card(ccnum,owner,exp_date,credit_nt)
-
-    mycc = CreditCard.new(:number => ccnum.to_s,:expiration_date => exp_date.to_s,:owner => owner.to_s,:credit_network => credit_nt.to_s)
-
-    unless mycc.validate_checksum then
-       { :message => "We could not store your credit card. :("}
-    else
-      mycc.save
-      { :message => "We stored your credit card! :)"}
-    end
-  end
 
   def login_user(user)
     payload = {user_id: user.id}

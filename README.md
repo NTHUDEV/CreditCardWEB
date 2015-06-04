@@ -1,3 +1,3 @@
-This is homework for Service Security. This service will validate, encrypt, and even hash credit cards. Pretty incredible for 6 weeks of class. Our wonderful api is located here:
+This is homework for Service Security class, Triforce #4. Our Web services is on the URL:
 
-http://enigmamfg-cc-api.herokuapp.com/
+https://kapianweb.herokuapp.com/
