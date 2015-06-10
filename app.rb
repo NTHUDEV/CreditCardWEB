@@ -36,7 +36,7 @@ register do
   def auth(*types)
     condition do
       if (types.include? :user) && !@current_user
-        flash[:error]  = "You must be logged in for that page"
+        flash[:error]  = "You must be logged in to enjoy that service."
         redirect "/login"
       end
     end
@@ -102,7 +102,7 @@ get '/activate' do
   haml :activate
 end
 
-get '/newcard/', :auth => [:user] do
+get '/newcard', :auth => [:user] do
   haml :newcard
 end
 
@@ -113,9 +113,17 @@ post '/newcard' do
       cc_expiration = params[:expiration_date].to_s unless params[:expiration_date].empty?
       cc_network = params[:network].to_s unless params[:network].empty?
       @creation = cards_jwt(cc_num, cc_owner, cc_expiration, cc_network)
+      haml :newcard
+   #rescue => e
+    #  puts e
+      #halt 400, "Check the parameters, it's seems you are in trouble"
+    end
 end
 
+
+
 get '/usercards', :auth => [:user] do
+  
   haml :usercards
 end
 

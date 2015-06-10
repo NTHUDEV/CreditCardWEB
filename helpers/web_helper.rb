@@ -5,6 +5,7 @@ require 'base64'
 require 'rbnacl/libsodium'
 require_relative 'email_helper'
 require 'httparty'
+require 'json'
 
 module WebAppHelper
   include EmailHelper
@@ -95,15 +96,16 @@ module WebAppHelper
   end
   
   def user_jwt 
-    jwt_payload = {'iss' => 'https://kapianapi.herokuapp.com/', 'sub' =>  @current_user.id}
+    jwt_payload = {'iss' => 'https://kapianweb.herokuapp.com', 'sub' =>  @current_user.id}
     jwt_key = OpenSSL::PKey::RSA.new(ENV['UI_PRIVATE_KEY'])
-    JWT.encode jwt_payload, jwt, 'RS256'
+    JWT.encode jwt_payload, jwt_key, 'RS256'
   end
 
   def cards_jwt(number, owner, expiration, network)
-    url = API_URL + 'credit_card'
-    body_json = {card_number: number, owner: owner, expiration_date: expiration, credit_network: network}
-    headers = {'authorization' => ('Bearer ' + user_jwt)}
+    url = API_URL + 'credit_card?user_id='+ @current_user.id.to_s
+    body_json = {card_number: number, owner: owner, expiration_date: expiration, credit_network: network}.to_json
+    headers = {'Authorization' => ('Bearer ' + user_jwt)}
+    puts body_json
     HTTParty.post url, body: body_json, headers: headers
   end
  
