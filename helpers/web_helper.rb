@@ -97,7 +97,7 @@ module WebAppHelper
   
   def user_jwt 
     jwt_payload = {'iss' => 'https://kapianweb.herokuapp.com', 'sub' =>  @current_user.id}
-    jwt_key = OpenSSL::PKey::RSA.new(ENV['UI_PRIVATE_KEY'])
+    jwt_key = OpenSSL::PKey::RSA.new(base64.decode64(ENV['UI_PRIVATE_KEY']))
     JWT.encode jwt_payload, jwt_key, 'RS256'
   end
 
@@ -105,8 +105,14 @@ module WebAppHelper
     url = API_URL + 'credit_card?user_id='+ @current_user.id.to_s
     body_json = {card_number: number, owner: owner, expiration_date: expiration, credit_network: network}.to_json
     headers = {'Authorization' => ('Bearer ' + user_jwt)}
-    puts body_json
     HTTParty.post url, body: body_json, headers: headers
+  end
+
+  def usercard
+     url = API_URL + 'credit_card?user_id='+ @current_user.id.to_s
+     body_json = {user_id: @current_user.id.to_s}
+     headers = {'Authorization' => ('Bearer ' + user_jwt)}
+     HTTParty.get url, body: body_json, headers: headers
   end
  
 end

@@ -119,11 +119,13 @@ post '/newcard' do
       #halt 400, "Check the parameters, it's seems you are in trouble"
     end
 end
-
+get '/token', :auth => [:user] do
+  user_jwt
+end
 
 
 get '/usercards', :auth => [:user] do
-  
+  @tablecards = usercard
   haml :usercards
 end
 
