@@ -97,7 +97,7 @@ module WebAppHelper
   
   def user_jwt 
     jwt_payload = {'iss' => 'https://kapianweb.herokuapp.com', 'sub' =>  @current_user.id}
-    jwt_key = OpenSSL::PKey::RSA.new(base64.decode64(ENV['UI_PRIVATE_KEY']))
+    jwt_key = OpenSSL::PKey::RSA.new(ENV['UI_PRIVATE_KEY'])
     JWT.encode jwt_payload, jwt_key, 'RS256'
   end
 

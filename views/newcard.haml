@@ -1,7 +1,7 @@
 %h2 Register New Credit Card
-- if @creation
+- if @created
     %p
-    = "#{@creation}"
+    = "Your results: #{@created['status']}"
 %form{:action => '/newcard', :method => 'post', :id => 'user-form'}
     %label{:for => 'card_number'} Credit Card Number:
     %input{:type => 'text', :name => 'card_number', :id => 'cc_number', :placeholder => '(enter credit card number)'}
