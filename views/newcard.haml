@@ -1,0 +1,19 @@
+%h2 Register New Credit Card
+- if @creation
+    %p
+    = "#{@creation[:status]}"
+%form{:action => '/newcard', :method => 'post', :id => 'user-form'}
+    %label{:for => 'card_number'} Credit Card Number:
+    %input{:type => 'text', :name => 'card_number', :id => 'cc_number', :placeholder => '(enter credit card number)'}
+    %br
+    %label{:for => 'owner'} Credit Card Owner:
+    %input{:type => 'text', :name => 'owner', :id => 'cc_owner', :placeholder => '(enter owners name)'}
+    %br
+    %label{:for => 'expiration_date'} Expiration Date:
+    %input{:type => 'text', :name => 'expiration_date', :id => 'cc_expiration', :placeholder => '(enter expiration date)'}
+    %br
+    %label{:for => 'network'} Credit Network:
+    %input{:type => 'text', :name => 'network', :id => 'cc_network', :placeholder => '(enter credit network)'}
+    %br
+    %input{:type => 'submit', :id => 'home-form-submit', :class => 'submit', :value => 'Register'}
+

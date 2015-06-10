@@ -4,9 +4,11 @@ require 'sendgrid-ruby'
 require 'base64'
 require 'rbnacl/libsodium'
 require_relative 'email_helper'
+require 'httparty'
 
 module WebAppHelper
   include EmailHelper
+  API_URL = 'https://kapianapi.herokuapp.com/api/v1/'
 
   def login_user(user)
     payload = {user_id: user.id}
@@ -71,7 +73,6 @@ module WebAppHelper
   end
 
   def create_user(token)
-
     if token == nil || token == "" then
       { :message => "Hi, nice to meet you."}
     elsif JWT.decode(token, ENV['TK_KEY'], true).kind_of?(Array) == false then
@@ -92,6 +93,18 @@ module WebAppHelper
       end
     end
   end
+  
+  def user_jwt 
+    jwt_payload = {'iss' => 'https://kapianapi.herokuapp.com/', 'sub' =>  @current_user.id}
+    jwt_key = OpenSSL::PKey::RSA.new(ENV['UI_PRIVATE_KEY'])
+    JWT.encode jwt_payload, jwt, 'RS256'
+  end
 
-
+  def cards_jwt(number, owner, expiration, network)
+    url = API_URL + 'credit_card'
+    body_json = {card_number: number, owner: owner, expiration_date: expiration, credit_network: network}
+    headers = {'authorization' => ('Bearer ' + user_jwt)}
+    HTTParty.post url, body: body_json, headers: headers
+  end
+ 
 end

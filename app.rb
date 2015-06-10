@@ -32,6 +32,17 @@ before do
 @current_user = find_user_by_token(session[:auth_token])
 end
 
+register do
+  def auth(*types)
+    condition do
+      if (types.include? :user) && !@current_user
+        flash[:error]  = "You must be logged in for that page"
+        redirect "/login"
+      end
+    end
+  end
+end
+
 
 #web app
 get '/' do
@@ -74,15 +85,13 @@ post '/register' do
     else
       fail('Passwords do not match.')
     end
-  ##rescue => e
-    ##logger.error(e)
-    ##flash[:error] = "#{e}"
-    ##redirect '/register'
+  rescue => e
+    logger.error(e)
+    flash[:error] = "#{e}"
+    redirect '/register'
 
   end
 end
-
-
 
 get '/success' do
   haml :registration_success
@@ -92,4 +101,22 @@ get '/activate' do
   @activation_results = create_user(params[:tk])
   haml :activate
 end
+
+get '/newcard/', :auth => [:user] do
+  haml :newcard
+end
+
+post '/newcard' do
+  begin
+      cc_num = params[:card_number].to_s unless params[:card_number].empty?
+      cc_owner = params[:owner].to_s unless params[:owner].empty?
+      cc_expiration = params[:expiration_date].to_s unless params[:expiration_date].empty?
+      cc_network = params[:network].to_s unless params[:network].empty?
+      @creation = cards_jwt(cc_num, cc_owner, cc_expiration, cc_network)
+end
+
+get '/usercards', :auth => [:user] do
+  haml :usercards
+end
+
 end
