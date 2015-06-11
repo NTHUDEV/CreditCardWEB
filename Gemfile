@@ -17,6 +17,7 @@ gem 'jwt'
 gem 'pony'
 gem 'sendgrid-ruby'
 gem 'rack-ssl-enforcer'
+gem 'httparty'
 
 group :development, :test do
   gem 'sqlite3'

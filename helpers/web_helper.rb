@@ -4,9 +4,12 @@ require 'sendgrid-ruby'
 require 'base64'
 require 'rbnacl/libsodium'
 require_relative 'email_helper'
+require 'httparty'
+require 'json'
 
 module WebAppHelper
   include EmailHelper
+  API_URL = 'https://kapianapi.herokuapp.com/api/v1/'
 
   def login_user(user)
     payload = {user_id: user.id}
@@ -71,7 +74,6 @@ module WebAppHelper
   end
 
   def create_user(token)
-
     if token == nil || token == "" then
       { :message => "Hi, nice to meet you."}
     elsif JWT.decode(token, ENV['TK_KEY'], true).kind_of?(Array) == false then
@@ -92,6 +94,25 @@ module WebAppHelper
       end
     end
   end
+  
+  def user_jwt 
+    jwt_payload = {'iss' => 'https://kapianweb.herokuapp.com', 'sub' =>  @current_user.id}
+    jwt_key = OpenSSL::PKey::RSA.new(ENV['UI_PRIVATE_KEY'])
+    JWT.encode jwt_payload, jwt_key, 'RS256'
+  end
 
+  def cards_jwt(number, owner, expiration, network)
+    url = API_URL + 'credit_card?user_id='+ @current_user.id.to_s
+    body_json = {card_number: number, owner: owner, expiration_date: expiration, credit_network: network}.to_json
+    headers = {'Authorization' => ('Bearer ' + user_jwt)}
+    HTTParty.post url, body: body_json, headers: headers
+  end
 
+  def usercard
+     url = API_URL + 'credit_card?user_id='+ @current_user.id.to_s
+     body_json = {user_id: @current_user.id.to_s}
+     headers = {'Authorization' => ('Bearer ' + user_jwt)}
+     HTTParty.get url, body: body_json, headers: headers
+  end
+ 
 end
