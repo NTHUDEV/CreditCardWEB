@@ -131,7 +131,7 @@ get '/user/:username' :auth => [:user] do
     flash[:error] = "You may only look at your own profile"
     redirec '/'
   end
-  haml: profile
+  haml :profile
 end
 
 
