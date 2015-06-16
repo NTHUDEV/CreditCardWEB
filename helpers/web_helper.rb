@@ -114,5 +114,14 @@ module WebAppHelper
      headers = {'Authorization' => ('Bearer ' + user_jwt)}
      HTTParty.get url, body: body_json, headers: headers
   end
- 
+  
+   def create_gh_user(username, email, token)
+     reg = Registration.new({'username' => username, 'email' => email,'password' => token})
+     create_user_with_registration(reg)
+   end
+
+   def create_account_with_registration(registration)
+     new_user = User.new(username: registration.username, email: registration.email, password: registration.password)
+     new_user.save ? login_user(new_user) : fail('Could not create new user')
+   end
 end

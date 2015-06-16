@@ -5,3 +5,6 @@
   %label{:for => 'user_password'} Password:
   %input{:type => 'password', :name => 'password', :id => 'user_password'}
   %input{:type => 'submit', :id => 'home-form-submit', :class => 'submit', :value => 'Login'}
+%p or
+%a{href: "https://github.com/login/oauth/authorize?client_id=#{ENV['GH_CLIENT_ID']}&scope=user:email"}
+Login with Github
