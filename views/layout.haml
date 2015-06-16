@@ -4,16 +4,18 @@
     %title Credit Card Services
   %body
     %h1 Welcome to Credit Card Services by Enigma Manufacturing.
+    %a{href: '/'}
+      = "| Home"
     - if @current_user
       = "Welcome #{@current_user.username} | "
       %a{href: '/logout'}
         logout
     - else
       %a{href: '/login'}
-        = "login | "
+        = "Login | "
       %a{href: '/register'}
-        = "register"
-    %a{href: '/'}
-      = "| Home"
+        = "Register"
+    %a{href: '/profile'}
+      = "| Profile"
     = haml :flash_bar
     = yield
