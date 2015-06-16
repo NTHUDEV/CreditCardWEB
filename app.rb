@@ -125,7 +125,7 @@ get '/token', :auth => [:user] do
 end
 
 
-get '/user/:username', :auth => [:user] do
+get '/profile/:username', :auth => [:user] do
   username = params[:username]
   unless username == @current_user.username
     flash[:error] = "You may only look at your own profile"
