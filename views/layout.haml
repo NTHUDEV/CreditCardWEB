@@ -10,12 +10,12 @@
       = "Welcome #{@current_user.username} | "
       %a{href: '/logout'}
         logout
+      %a{href: "/user/#{@current_user.username}"}
+        | Profile
     - else
       %a{href: '/login'}
         = "Login | "
       %a{href: '/register'}
         = "Register"
-    %a{href: "/user/#{@current_user.username}"}
-      = "| Profile"
     = haml :flash_bar
     = yield

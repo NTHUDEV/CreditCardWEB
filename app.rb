@@ -58,7 +58,7 @@ post '/login' do
   password = params[:password]
 
   user = User.authenticate!(username,password)
-  user ? login_user(user) : redirect('/')
+  user ? login_user(user) : flash[:error] = "username or password incorrect";redirect('/')
 end
 
 get '/logout' do
