@@ -113,9 +113,16 @@ module WebAppHelper
      HTTParty.get url, body: body_json, headers: headers
   end
 
-   def create_account_with_registration(username, email, password)
-     new_user = User.new(username: username, email: email, password: password)
-     new_user.save ? login_user(new_user) : fail('Could not create new user')
+   def create_account_with_registration(username, email, token)
+     new_user = User.new(username: username, email: email)
+     new_user.password = token
+     if new_user.save! then
+        send_welcome_email(new_user.email)
+        { :message => "You are good to go. Enjoy our wonderful API."}
+     else
+        { :message => "Something went really wrong while activating your account."}
+     end
+   login_user(new_user)
    end
    
    def find_user_by_username(username)

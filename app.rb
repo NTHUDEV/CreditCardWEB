@@ -145,7 +145,8 @@ end
    gh = HTTParty.post('https://github.com/login/oauth/access_token', 
         body: {client_id: ENV['GH_CLIENT_ID'], client_secret: ENV['GH_CLIENT_SECRET'], code: params['code']},
         headers: {'Accept' => 'application/json'})
-   gh_user = HTTParty.get('https://api.github.com/user',
+   gh_user = HTTParty.get(
+        'https://api.github.com/user',
         body: {params: {access_token: gh['access_token']}},
         headers: {'User-Agent' => 'Credit Card APP', 'Authorization' => "token #{gh['access_token']}"})
    username = gh_user['login']

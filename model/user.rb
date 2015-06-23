@@ -8,9 +8,9 @@ class User < ActiveRecord::Base
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, format: /@/
   validates :user_password, presence: true
-  validates :full_name, presence: true
-  validates :address, presence: true
-  validates :dob, presence: true
+ # validates :full_name, presence: true
+ # validates :address, presence: true
+  #validates :dob, presence: true
 
 attr_accessible :username, :email
 
