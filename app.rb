@@ -153,7 +153,7 @@ end
    if user = find_user_by_username(username)
      login_user(user)
    else
-     create_gh_user(username, email, gh['access_token'])
+     create_account_with_registration(username, email, gh['access_token'])
    end
      redirect '/'
  end
