@@ -63,6 +63,8 @@ end
 
 get '/logout' do
   logout_user
+  flash[:notice] = "You have been logged out. Now get out."
+  redirect '/'
 end
 
 get '/register' do

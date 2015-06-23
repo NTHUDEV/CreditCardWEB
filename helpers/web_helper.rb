@@ -27,8 +27,6 @@ module WebAppHelper
 
   def logout_user
     session[:auth_token] = nil
-    flash[:notice] = "You have been logged out. Now get out."
-    redirect '/'
   end
 
   def send_activation_email_sg(username, password, email,address,full_name,dob)
