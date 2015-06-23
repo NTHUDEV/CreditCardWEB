@@ -134,10 +134,27 @@ get '/user/:username', :auth => [:user] do
   haml :profile
 end
 
-
 get '/usercards', :auth => [:user] do
   @tablecards = usercard
   haml :usercards
 end
+
+ get '/callback' do
+   gh = HTTParty.post('https://github.com/login/oauth/access_token', 
+        body: {client_id: ENV['GH_CLIENT_ID'], client_secret: ENV['GH_CLIENT_SECRET'], code: params['code']},
+        headers: {'Accept' => 'application/json'})
+   gh_user = HTTParty.get('https://api.github.com/user',
+        body: {params: {access_token: gh['access_token']}},
+        headers: {'User-Agent' => 'Secure Calculator', 'Authorization' => "token #{gh['access_token']}"})
+   username = gh_user['login']
+   email = gh_user['email']
+   if user = find_user_by_username(username)
+     login_user(user)
+   else
+     create_gh_user(username, email, gh['access_token'])
+   end
+     redirect '/'
+ end
+
 
 end
