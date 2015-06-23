@@ -115,13 +115,23 @@ post '/newcard' do
       @created = cards_jwt(cc_num, cc_owner, cc_expiration, cc_network)
       haml :newcard
   
-   #rescue => e
-    #  puts e
-      #halt 400, "Check the parameters, it's seems you are in trouble"
+   rescue => e
+     puts e
+       halt 400, "Check the parameters, it's seems you are in trouble"
     end
 end
 get '/token', :auth => [:user] do
   user_jwt
+end
+
+
+get '/user/:username', :auth => [:user] do
+  username = params[:username]
+  unless username == @current_user.username
+    flash[:error] = "You may only look at your own profile"
+    redirect '/'
+  end
+  haml :profile
 end
 
 
