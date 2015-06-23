@@ -6,6 +6,7 @@ require_relative './helpers/web_helper.rb'
 require 'haml'
 require 'rack-flash'
 require 'rack/ssl-enforcer'
+require 'dalli'
 
 class WebAppCC < Sinatra::Base
   include WebAppHelper
@@ -27,7 +28,15 @@ configure do
   enable :logging
   use Rack::Flash, :sweep => true
 end
-
+configure do
+  hirb.enable
+  set :ops_cache, Dalli::Client.new((ENV['MEMCACHIER_SERVERS'] || "").split(","),
+     {:username => ENV['MEMCACHIER_USERNAME'],
+      :password => ENV['MEMCACHIER_PASSWORD'];
+      :socket_timeout => 1.5,
+      :socket_failure_delay => 0.2
+     })
+end
 before do
 @current_user = find_user_by_token(session[:auth_token])
 end
