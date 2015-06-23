@@ -145,7 +145,7 @@ end
         headers: {'Accept' => 'application/json'})
    gh_user = HTTParty.get('https://api.github.com/user',
         body: {params: {access_token: gh['access_token']}},
-        headers: {'User-Agent' => 'Secure Calculator', 'Authorization' => "token #{gh['access_token']}"})
+        headers: {'User-Agent' => 'Web Service', 'Authorization' => "token #{gh['access_token']}"})
    username = gh_user['login']
    email = gh_user['email']
    if user = find_user_by_username(username)
