@@ -10,14 +10,11 @@
         EXPIRATION DATE
       %th
         CREDIT NETWORK
-      %th
-        ENCRYPTED CARD NUMBER
   %tbody
-    - @tablecards.each do |row|
+    -@tablecards['credit_cards'].each do |row|
       %tr
-        %td= "#{row['id']}"
         %td= "#{row['owner']}"
         %td= "#{row['expiration_date']}"
         %td= "#{row['credit_network']}"
-        %td= "#{row['encrypted_number']}"
+        %td= "#{row['number']}"
 

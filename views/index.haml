@@ -7,26 +7,23 @@
     %li
       %a{href: '/newcard'}
         Create a New Credit Card
-  - if @cards
+  - if (@cards)
     %h3 User Credit Cards registered:
-    %ul
-      -@cards['credit_cards'].each do |row|
-        %table{:border => 1}
-        %thead
-          %tr 
-            %th
-              OWNER
-            %th
-              EXPIRATION DATE
-            %th
-              CREDIT NETWORK
-            %th
-              CREDIT CARD NUMBER
-        %tbody
-          - @tablecards.each do |row|
-            %tr
-              %td= "#{row['owner']}"
-              %td= "#{row['expiration_date']}"
-              %td= "#{row['credit_network']}"
-              %td= "#{row['number']}"
- 
+    %table{:border => 1}
+      %thead
+        %tr 
+          %th
+            OWNER
+          %th
+            EXPIRATION DATE
+          %th
+            CREDIT NETWORK
+          %th
+            CREDIT CARD NUMBER
+      %tbody
+        -@cards['credit_cards'].each do |row|
+          %tr
+            %td= "#{row['owner']}"
+            %td= "#{row['expiration_date']}"
+            %td= "#{row['credit_network']}"
+            %td= "#{row['number']}"

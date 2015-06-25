@@ -150,10 +150,10 @@ get '/user/:username', :auth => [:user] do
   haml :profile
 end
 
-#get '/usercards', :auth => [:user] do
-#  @tablecards = usercard
- # haml :usercards
-#end
+get '/usercards', :auth => [:user] do
+  @tablecards = JSON.parse(usercard.to_json)
+  haml :usercards
+end
 
  get '/callback' do
    gh = HTTParty.post('https://github.com/login/oauth/access_token', 
