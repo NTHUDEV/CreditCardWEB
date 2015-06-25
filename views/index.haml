@@ -10,4 +10,28 @@
     %li
       %a{href: '/usercards'}
         Credit Card Available
+  %br
+  - if @current_user
+    ="Cards availables for user #{@current_user}"
+    %table{:border => 1}
+      %thead
+        %tr 
+          %th
+            ID
+          %th
+            OWNER
+          %th
+            EXPIRATION DATE
+          %th
+            CREDIT NETWORK
+          %th
+            ENCRYPTED CARD NUMBER
+      %tbody
+        - @tablecards.each do |row|
+          %tr
+            %td= "#{row['id']}"
+            %td= "#{row['owner']}"
+            %td= "#{row['expiration_date']}"
+            %td= "#{row['credit_network']}"
+            %td= "#{row['encrypted_number']}"
  

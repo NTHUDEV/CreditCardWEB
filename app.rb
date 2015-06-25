@@ -27,16 +27,16 @@ configure do
   ##use Rack::Session::Cookie, secret: ENV['TK_KEY']
   enable :logging
   use Rack::Flash, :sweep => true
-end
-configure do
-  hirb.enable
+  require 'hirb'
+  Hirb.enable
   set :ops_cache, Dalli::Client.new((ENV['MEMCACHIER_SERVERS'] || "").split(","),
      {:username => ENV['MEMCACHIER_USERNAME'],
-      :password => ENV['MEMCACHIER_PASSWORD'];
+      :password => ENV['MEMCACHIER_PASSWORD'],
       :socket_timeout => 1.5,
       :socket_failure_delay => 0.2
      })
 end
+
 before do
 @current_user = find_user_by_token(session[:auth_token])
 end
@@ -55,6 +55,9 @@ end
 
 #web app
 get '/' do
+  if @current_user
+    @tablecards = usercard
+  end
   haml :index
 end
 
@@ -145,10 +148,10 @@ get '/user/:username', :auth => [:user] do
   haml :profile
 end
 
-get '/usercards', :auth => [:user] do
-  @tablecards = usercard
-  haml :usercards
-end
+#get '/usercards', :auth => [:user] do
+#  @tablecards = usercard
+#  haml :usercards
+#end
 
  get '/callback' do
    gh = HTTParty.post('https://github.com/login/oauth/access_token', 
