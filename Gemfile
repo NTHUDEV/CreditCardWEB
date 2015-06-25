@@ -4,7 +4,6 @@ ruby '2.2.0'
 gem 'sinatra'
 gem 'thin'
 gem 'json'
-
 gem 'rake'
 gem 'activerecord'
 gem 'sinatra-activerecord'
@@ -18,6 +17,8 @@ gem 'pony'
 gem 'sendgrid-ruby'
 gem 'rack-ssl-enforcer'
 gem 'httparty'
+gem 'dalli'
+gem 'activesupport'
 
 group :development, :test do
   gem 'sqlite3'

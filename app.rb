@@ -6,6 +6,7 @@ require_relative './helpers/web_helper.rb'
 require 'haml'
 require 'rack-flash'
 require 'rack/ssl-enforcer'
+require 'dalli'
 
 class WebAppCC < Sinatra::Base
   include WebAppHelper
@@ -27,7 +28,15 @@ configure do
   enable :logging
   use Rack::Flash, :sweep => true
 end
-
+configure do
+  Hirb.enable
+  set :ops_cache, Dalli::Client.new((ENV['MEMCACHIER_SERVERS'] || "").split(","),
+     {:username => ENV['MEMCACHIER_USERNAME'],
+      :password => ENV['MEMCACHIER_PASSWORD'],
+      :socket_timeout => 1.5,
+      :socket_failure_delay => 0.2
+     })
+end
 before do
 @current_user = find_user_by_token(session[:auth_token])
 end
@@ -46,6 +55,11 @@ end
 
 #web app
 get '/' do
+  @cards = if @current_user
+    JSON.parse( settings.ops_cache.fetch(@current_user.id) { usercard.to_json} )
+  else
+    nil
+  end
   haml :index
 end
 
@@ -137,7 +151,7 @@ get '/user/:username', :auth => [:user] do
 end
 
 get '/usercards', :auth => [:user] do
-  @tablecards = usercard
+  @tablecards = JSON.parse(usercard.to_json)
   haml :usercards
 end
 
