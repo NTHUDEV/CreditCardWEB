@@ -29,10 +29,10 @@ configure do
   use Rack::Flash, :sweep => true
 end
 configure do
-  hirb.enable
+  Hirb.enable
   set :ops_cache, Dalli::Client.new((ENV['MEMCACHIER_SERVERS'] || "").split(","),
      {:username => ENV['MEMCACHIER_USERNAME'],
-      :password => ENV['MEMCACHIER_PASSWORD'];
+      :password => ENV['MEMCACHIER_PASSWORD'],
       :socket_timeout => 1.5,
       :socket_failure_delay => 0.2
      })
@@ -55,6 +55,11 @@ end
 
 #web app
 get '/' do
+  @cards = if @current_user
+    JSON.parse( settings.ops_cache.fetch(@current_user.id) { usercard.to_json} )
+  else
+    nil
+  end
   haml :index
 end
 
@@ -145,10 +150,10 @@ get '/user/:username', :auth => [:user] do
   haml :profile
 end
 
-get '/usercards', :auth => [:user] do
-  @tablecards = usercard
-  haml :usercards
-end
+#get '/usercards', :auth => [:user] do
+#  @tablecards = usercard
+ # haml :usercards
+#end
 
  get '/callback' do
    gh = HTTParty.post('https://github.com/login/oauth/access_token', 
